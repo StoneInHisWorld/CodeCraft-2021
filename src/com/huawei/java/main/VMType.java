@@ -7,55 +7,39 @@ package com.huawei.java.main;
  * Edited by HHW
  * 2021/3/12 11:40
  *
+ * Edited by HHW
+ * 2021/3/12 16:55
  */
 
 public class VMType {
     //型号由id更名为type，因为虚拟机还有个属性id，后续操作会用到
-    String type;
-    int cpu;
-    int memory;
-    int node;
+    final String type;
+    final int cpu;
+    final int memory;
+    //结点由node更名为isDouble，我认为这样更清楚地标识该种类的虚拟机是否是双节点部署
+    final boolean isDouble;
 
-    public VMType() {
-    }
-
-    public VMType(String type, int cpu, int memory, int node) {
+    public VMType(String type, int cpu, int memory, Boolean isDouble) {
         this.type = type;
         this.cpu = cpu;
         this.memory = memory;
-        this.node = node;
+        this.isDouble = isDouble;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public int getCpu() {
         return cpu;
-    }
-
-    public void setCpu(int cpu) {
-        this.cpu = cpu;
     }
 
     public int getMemory() {
         return memory;
     }
 
-    public void setMemory(int memory) {
-        this.memory = memory;
-    }
-
-    public int getNode() {
-        return node;
-    }
-
-    public void setNode(int node) {
-        this.node = node;
+    public boolean isDouble() {
+        return isDouble;
     }
 
     @Override
@@ -64,7 +48,7 @@ public class VMType {
                 "type='" + type + '\'' +
                 ", cpu=" + cpu +
                 ", memory=" + memory +
-                ", node=" + node +
+                ", isDouble=" + isDouble +
                 '}';
     }
 }

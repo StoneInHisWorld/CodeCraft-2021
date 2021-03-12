@@ -3,6 +3,9 @@ package com.huawei.java.main;
 /**
  * Created by HHW
  * 2021/3/11 16:27
+ *
+ * Edited by HHW
+ * 2021/3/12 16:55
  */
 
 import java.util.Arrays;
@@ -10,6 +13,8 @@ import java.util.Arrays;
 public class Request {
 
     final private String op;
+    //若 op equals "add" 则第一个存虚拟机的类型，第二个存VMID
+    //若 op equals "del" 则只有一个参数为虚拟机的ID
     private String[] vmPar;
 
     public Request(String op){

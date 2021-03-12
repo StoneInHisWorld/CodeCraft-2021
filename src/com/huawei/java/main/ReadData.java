@@ -2,6 +2,7 @@ package com.huawei.java.main;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,14 +11,13 @@ import java.util.List;
  *
  * Edited by HHW
  * 2021/3/11 16:27
+ *
+ * Edited by HHW
+ * 2021/3/12 16:55
  */
 
 public class ReadData {
 
-    private File file;
-//    private List<PMType> pmList;
-//    private List<VMType> vmList;
-    private InputStreamReader inputStreamReader;
     private BufferedReader bufferedReader;
 
     public ReadData(){
@@ -27,17 +27,19 @@ public class ReadData {
     //此方法在使用ReadData的其他方法之前，必须调用一次
     //用于初始化读取的文件以及对应的文件输入输出流，以及数据存储对象初始化
     public void init(String fileName) throws FileNotFoundException {
-        file = new File(fileName);
+        File file = new File(fileName);
 //        pmList = new ArrayList<>();
 //        vmList = new ArrayList<>();
-        inputStreamReader = new InputStreamReader(new FileInputStream(file));
+        //    private List<PMType> pmList;
+        //    private List<VMType> vmList;
+        InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file));
         bufferedReader = new BufferedReader(inputStreamReader);
     }
 
     //读取输入文件中所有类型的服务器（物理机）
     public List<PMType> readPMTypes(){
         //pmList改名为pmTypes，因此方法读取的是服务器的类型
-        List<PMType> pmTypeTypes = new ArrayList<>();
+        List<PMType> pmTypeTypes = new LinkedList<>();
 //        File file = new File(fileName);
         try {
 //            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file));
@@ -70,7 +72,8 @@ public class ReadData {
 
     //读取输入文件中所有类型的虚拟机
     public List<VMType> readVMTypes(){
-        List<VMType> VMTypeTypes = new ArrayList<>();
+        //据说LinkedList<>便于foreach查找
+        List<VMType> vmTypeList = new LinkedList<>();
 //        fileName="C:\\Users\\YS\\Desktop\\华为\\training-1.txt";
 //        File file=new File(fileName);
         try {
@@ -95,13 +98,20 @@ public class ReadData {
                 int cpu = Integer.parseInt(strings[1]);
                 int memory = Integer.parseInt(strings[2]);
                 int note = Integer.parseInt(strings[3]);
-                VMType vmType = new VMType(id, cpu, memory, note);
-                VMTypeTypes.add(vmType);
+                VMType vmType;
+                if (note == 1){
+                    vmType = new VMType(id, cpu, memory, true);
+                } else if (note == 0) {
+                    vmType = new VMType(id, cpu, memory, false);
+                } else{
+                    throw new IllegalArgumentException("Wrong parameter note!");
+                }
+                vmTypeList.add(vmType);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return VMTypeTypes;
+        return vmTypeList;
     }
 
     public int readDay() throws IOException {
