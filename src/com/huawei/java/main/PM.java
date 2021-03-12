@@ -23,8 +23,8 @@ public class PM {
     private int BCPU_Remaining;
     private int AMem_Remaining;
     private int BMem_Remaining;
-    //部署在此的虚拟机
-    private List<VM> vmList;
+//    //部署在此的虚拟机
+//    private List<VM> vmList;
 
     public PM(PMType type, int id, int ACPU_Remaining, int BCPU_Remaining,
               int AMem_Remaining, int BMem_Remaining) {
@@ -34,7 +34,7 @@ public class PM {
         this.BCPU_Remaining = BCPU_Remaining;
         this.AMem_Remaining = AMem_Remaining;
         this.BMem_Remaining = BMem_Remaining;
-        vmList = new ArrayList<>();
+//        vmList = new ArrayList<>();
     }
 
     //是否能部署虚拟机
@@ -80,6 +80,7 @@ public class PM {
 
     private boolean addVM(String node, VM vm){
         VMType vmType = vm.getVmType();
+        System.out.println(vm.toString());
         switch (node) {
             case "A":
                 if (!vmType.isDouble()) {
@@ -90,7 +91,7 @@ public class PM {
                 if (ACPU_Remaining * AMem_Remaining < 0) {
                     throw new IllegalArgumentException("Resources shortage!");
                 }
-                vmList.add(vm);
+//                vmList.add(vm);
                 break;
             case "B":
                 if (!vmType.isDouble()) {
@@ -101,7 +102,7 @@ public class PM {
                 if (BCPU_Remaining * BMem_Remaining < 0) {
                     throw new IllegalArgumentException("Resources shortage!");
                 }
-                vmList.add(vm);
+//                vmList.add(vm);
                 break;
             case "AB":
                 if (vmType.isDouble()) {
@@ -121,4 +122,38 @@ public class PM {
         return true;
     }
 
+    public boolean undeployVM(VM vmToDel) throws Exception {
+        VMType type = vmToDel.getVmType();
+        String node = vmToDel.getNode();
+        int CPUNeeds = type.getCpu();
+        int MemNeeds = type.getMemory();
+        switch (node){
+            case "A":
+                if (type.isDouble()) {
+                    throw new Exception("Mismatch VM!");
+                }
+                this.ACPU_Remaining += CPUNeeds;
+                this.AMem_Remaining += MemNeeds;
+                break;
+            case "B":
+                if (type.isDouble()) {
+                    throw new Exception("Mismatch VM!");
+                }
+                this.BCPU_Remaining += CPUNeeds;
+                this.BMem_Remaining += MemNeeds;
+                break;
+            case "AB":
+                if (!type.isDouble()) {
+                    throw new Exception("Mismatch VM!");
+                }
+                this.ACPU_Remaining += CPUNeeds / 2;
+                this.AMem_Remaining += MemNeeds / 2;
+                this.BCPU_Remaining += CPUNeeds / 2;
+                this.BMem_Remaining += MemNeeds / 2;
+                break;
+            default:
+                throw new Exception("No such VM in this server");
+        }
+        return true;
+    }
 }

@@ -15,8 +15,9 @@ import java.util.List;
 public class Main {
 
     private ReadData readData;
+    private HandleData handleData;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // TODO: read standard input
         // TODO: process
         // TODO: write standard output
@@ -30,12 +31,12 @@ public class Main {
             e.printStackTrace();
         }
 
-        List<PMType> pmTypeTypes = readData.readPMTypes();
-        for (PMType pmType : pmTypeTypes)
+        List<PMType> pmTypeList = readData.readPMTypes();
+        for (PMType pmType : pmTypeList)
             System.out.println(pmType);
 
-        List<VMType> vmTypeTypes = readData.readVMTypes();
-        for (VMType vmType : vmTypeTypes)
+        List<VMType> vmTypeList = readData.readVMTypes();
+        for (VMType vmType : vmTypeList)
             System.out.println(vmType);
 
         int day = 0;
@@ -45,12 +46,16 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        HandleData handleData = new HandleData(pmTypeList, vmTypeList);
         for (int i = 0;i < day;i++) {
+            //包含了这一天的请求
             List<Request> requestList = readData.readRequest_ofADay();
             //将所有请求输出
             for (Request request : requestList) {
                 System.out.println(request.toString());
             }
+            handleData.handleRequestOfADay(requestList);
         }
     }
 
